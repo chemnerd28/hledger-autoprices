@@ -2,19 +2,29 @@ from yahoo_fin.stock_info import get_live_price
 from datetime import date
 
 def grabPrice():
-    for i in tickers:
+    print("grabbing current price data for the following:", openingTickerList)
+    for i in openingTickerList:
         with open("2021.prices", 'a+') as file1:
             live_price = '%.2f'%(get_live_price(i))
-            file1.write ("\n" + "P ")
+            file1.write ("P ")
             file1.write (date.today().strftime('%Y-%m-%d'))
-            file1.write (" " + i + " " + str(live_price))
+            file1.write (" " + i + " " + live_price + "\n")
 
-tickers = ["GOOG","AMZN","SPY","AOR","QQQ"]
+tickerSymbols = open('ticker.symbols')
+openingTickerList = []
+for line in tickerSymbols:
+    openingTickerList.append(line.strip('\n'))
+tickerSymbols.close()
 
-ask = input("any new tickers? Y/N")
+ask = input("Do you have any new ticker symbols to add? Y/N")
+
 if ask == "N":
     grabPrice()
 else:
-    newTicker = input("what new ticker do you want to add?")
-    tickers.append(newTicker)
+    newTicker = input("what new tickers do you want to add? (Split with comma, no spaces)")
+    toAddSymbols = newTicker.split(',')
+    openingTickerList.extend(toAddSymbols)
+    with open ("ticker.symbols", 'w') as file2:
+        for item in openingTickerList:
+            file2.write(item + '\n')
     grabPrice()
