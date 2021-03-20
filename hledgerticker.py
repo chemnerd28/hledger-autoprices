@@ -10,11 +10,10 @@ def grabPrice():
             file1.write (date.today().strftime('%Y-%m-%d'))
             file1.write (" " + i + " " + live_price + "\n")
 
-tickerSymbols = open('ticker.symbols')
-openingTickerList = []
-for line in tickerSymbols:
-    openingTickerList.append(line.strip('\n'))
-tickerSymbols.close()
+with open("ticker.symbols", 'r') as tickerSymbols:
+    openingTickerList = []
+    for line in tickerSymbols:
+        openingTickerList.append(line.strip('\n'))
 
 ask = input("Do you have any new ticker symbols to add? Y/N")
 
